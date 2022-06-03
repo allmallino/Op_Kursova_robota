@@ -380,8 +380,19 @@ namespace Kursach
                             command = new SqlCommand(mainCmd.CommandText + " Having dbo.Cover.Name Like '" + searchDiskTb.Text.Replace("'", "''") + "%'", conn);
                             break;
                         case 1:
-                            command = new SqlCommand(mainCmd.CommandText + " Having dbo.Company.Name Like '" + searchDiskTb.Text.Replace("'", "''") + "%'", conn);
+                            command = new SqlCommand("SELECT dbo.Plate.IDPlate as ID, dbo.Cover.Name AS Cover, dbo.Plate.N_In_Stock as Stock, dbo.Plate.Release_Time as Release, dbo.Plate.Wholesale_price as Price, " +
+                                                      "dbo.Company.Name as Seller, (select dbo.Company.Name from dbo.Company where IDCompany = IDCompany_Creator) as Creator " +
+                                                      "FROM dbo.Plate INNER JOIN dbo.Cover ON dbo.Plate.IDCover = dbo.Cover.IDCover inner join dbo.Company ON dbo.Plate.IDCompany_Seller = dbo.Company.IDCompany " +
+                                                      "where IDCompany_Seller in (select IDCompany from dbo.Company group by IDCompany, Name having Name like '" + searchDiskTb.Text.Replace("'", "''") + "%') " +
+                                                      "group by Cover.Name, dbo.Plate.N_In_Stock, dbo.Plate.Release_Time, dbo.Plate.Wholesale_price, dbo.Company.Name, dbo.Plate.IDCompany_Creator, dbo.Plate.IDPlate", conn);
                             break;
+                        case 2:
+                            command = new SqlCommand("SELECT dbo.Plate.IDPlate as ID, dbo.Cover.Name AS Cover, dbo.Plate.N_In_Stock as Stock, dbo.Plate.Release_Time as Release, dbo.Plate.Wholesale_price as Price, " +
+                                                      "dbo.Company.Name as Seller, (select dbo.Company.Name from dbo.Company where IDCompany = IDCompany_Creator) as Creator " +
+                                                      "FROM dbo.Plate INNER JOIN dbo.Cover ON dbo.Plate.IDCover = dbo.Cover.IDCover inner join dbo.Company ON dbo.Plate.IDCompany_Seller = dbo.Company.IDCompany " +
+                                                      "where IDCompany_Creator in (select IDCompany from dbo.Company group by IDCompany, Name having Name like '" + searchDiskTb.Text.Replace("'", "''") + "%') " +
+                                                      "group by Cover.Name, dbo.Plate.N_In_Stock, dbo.Plate.Release_Time, dbo.Plate.Wholesale_price, dbo.Company.Name, dbo.Plate.IDCompany_Creator, dbo.Plate.IDPlate", conn);
+                            break ;
                     }
                     adapter = new SqlDataAdapter(command);
                     adapter.Fill(searchTable);
@@ -471,6 +482,11 @@ namespace Kursach
                     musicianSearchList.SelectedIndex = -1;
                 }
             }
+            else if(diskShow.Visibility == Visibility.Visible)
+            {
+                searchDiskTb.Text = "";
+                musicChanged();
+            }
         }
         #endregion
 
@@ -500,6 +516,10 @@ namespace Kursach
             {
                 musicianAddWindow.Visibility = Visibility.Visible;
                 musicianAddText.Text = "";
+                cmd = new SqlCommand("Select [Group].Name as Name, [Group].IDGroup from [Group]", conn);
+                adapter = new SqlDataAdapter(cmd);
+                adapter.Fill(addTable);
+                groupList.ItemsSource = addTable.DefaultView;
                 groupList.SelectedIndex = 0;
             }
             else if (diskShow.Visibility == Visibility.Visible)
@@ -602,7 +622,7 @@ namespace Kursach
                 {
                     SqlCommand cmd;
                     if (musicianAddText.Text.Split(' ').Length==1)
-                        cmd = new SqlCommand("INSERT INTO Musician(Name,IDGroup) VALUES('" + musicianAddText.Text.Split(' ')[0].Replace("'", "''") + "'," + addTable.Rows[groupList.SelectedIndex][1] + ")", conn);
+                        cmd = new SqlCommand("INSERT INTO Musician(Name,IDGroup, Surname) VALUES('" + musicianAddText.Text.Split(' ')[0].Replace("'", "''") + "'," + addTable.Rows[groupList.SelectedIndex][1] + ", '')", conn);
                     else
                         cmd = new SqlCommand("INSERT INTO Musician(Name,IDGroup,Surname) VALUES('" + musicianAddText.Text.Split(' ')[0].Replace("'", "''") + "'," + addTable.Rows[groupList.SelectedIndex][1] + ",'"+ musicianAddText.Text.Split(' ')[1].Replace("'", "''") + "')", conn);
                     cmd.ExecuteNonQuery();
@@ -905,7 +925,7 @@ namespace Kursach
             {
                 if (musicianToAdd.SelectedIndex != -1)
                 {
-                    SqlCommand cmd = new SqlCommand("Update Musician Set IDGroup = "+ dt.Rows[index][1] + " Where IDMusician = " + addTable1.Rows[musicianToAdd.SelectedIndex][2], conn);
+                    SqlCommand cmd = new SqlCommand("Update Musician Set IDGroup = "+ dt.Rows[index][1] + " Where IDMusician = " + addTable1.Rows[musicianToAdd.SelectedIndex][1], conn);
                     cmd.ExecuteNonQuery();
                     musicChanged();
                     musicChangeChanged();
@@ -949,7 +969,7 @@ namespace Kursach
             {
                 if (musicianToDelete.SelectedIndex != -1)
                 {
-                    SqlCommand cmd = new SqlCommand("Update Musician Set IDGroup = null Where IDMusician = " + deleteTable1.Rows[musicianToDelete.SelectedIndex][2], conn);
+                    SqlCommand cmd = new SqlCommand("Update Musician Set IDGroup = null Where IDMusician = " + deleteTable1.Rows[musicianToDelete.SelectedIndex][1], conn);
                     cmd.ExecuteNonQuery();
                     musicChanged();
                     musicChangeChanged();
