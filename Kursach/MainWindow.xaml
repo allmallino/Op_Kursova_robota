@@ -7,6 +7,82 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="Kursach.MainWindow"
         mc:Ignorable="d"
         Title="Music store" Height="500" Width="800" ResizeMode="NoResize" SizeToContent="Manual" WindowStyle="None" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style x:Key="buttonBase" TargetType="Border">
+            <Style.Setters>
+                <Setter Property="Background" Value="#FF00FF90"/>
+                <Setter Property="BorderBrush" Value="White"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="CornerRadius" Value="10"/>
+                <Setter Property="Cursor" Value="Hand"/>
+            </Style.Setters>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FF7BFFCA"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="addButtonMenu" TargetType="Border" BasedOn="{StaticResource buttonBase}">
+            <EventSetter Event="MouseLeftButtonDown" Handler="addWindowOpen"/>
+            <Setter Property="Width" Value="75"/>
+            <Setter Property="Height" Value="40"/>
+        </Style>
+        <Style x:Key="changeButtonMenu" TargetType="Border" BasedOn="{StaticResource buttonBase}">
+            <EventSetter Event="MouseLeftButtonDown" Handler="musicChange"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="150"/>
+        </Style>
+        <Style x:Key="deleteButtonMenu" TargetType="Border" BasedOn="{StaticResource buttonBase}">
+            <EventSetter Event="MouseLeftButtonDown" Handler="deleteMusic"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="150"/>
+        </Style>
+        <Style x:Key="rightItemButton" TargetType="Border" BasedOn="{StaticResource buttonBase}">
+            <EventSetter Event="MouseLeftButtonDown" Handler="rightItem"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="150"/>
+        </Style>
+        <Style x:Key="leftItemButton" TargetType="Border" BasedOn="{StaticResource buttonBase}">
+            <EventSetter Event="MouseLeftButtonDown" Handler="leftItem"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="150"/>
+        </Style>
+        <Style x:Key="BackChangeButton" TargetType="Border" BasedOn="{StaticResource buttonBase}">
+            <EventSetter Event="MouseLeftButtonDown" Handler="changeWindowClose"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="75"/>
+        </Style>
+        <Style x:Key="dataGridBaseStyle" TargetType="DataGrid">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="ColumnWidth" Value="190"/>
+            <Setter Property="HeadersVisibility" Value="None"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden"/>
+            <Setter Property="CanUserResizeColumns" Value="False"/>
+            <Setter Property="CanUserReorderColumns" Value="False"/>
+            <Setter Property="CanUserSortColumns" Value="False"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="CanUserDeleteRows" Value="False"/>
+            <Setter Property="CanUserResizeRows" Value="False"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="Background" Value="{x:Null}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="Black"/>
+            <Setter Property="CellStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Background" Value="#FF00FF90"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
@@ -23,26 +99,26 @@
                 <RowDefinition/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
-            <Label Foreground="White" Content="Menu" FontSize="36" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            <Label Foreground="White" Content="Menu" FontSize="48" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
             <Grid Grid.Row="1" MouseLeftButtonDown="musicShowing" Background="#00000000">
                 <Image Width="30" Height="30" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="5,0,0,0" Source="/icons8-музыка-30 (1).png"/>
-                <Label HorizontalAlignment="Left" Content="Music" Foreground="White" FontSize="22" Height="40" VerticalAlignment="Center" Margin="40,0,0,0" FontFamily="Segoe UI" />
+                <Label HorizontalAlignment="Left" Content="Tracks" Foreground="White" FontSize="22" Height="40" VerticalAlignment="Center" Margin="40,0,0,0" FontFamily="Segoe UI" />
             </Grid>
             <Grid Grid.Row="2" Cursor="Hand" MouseLeftButtonDown="coverShowing" Background="#00000000">
                 <Image Width="30" Height="30" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="5,0,0,0" Source="/icons8-плейлист-lounge-30.png"/>
-                <Label HorizontalAlignment="Left" Content="Cover" Foreground="#FFA7A6A6" FontSize="22" Height="40" VerticalAlignment="Center" Margin="40,0,0,0" />
+                <Label HorizontalAlignment="Left" Content="Playlists" Foreground="#FFA7A6A6" FontSize="22" Height="40" VerticalAlignment="Center" Margin="40,0,0,0" />
             </Grid>
             <Grid Grid.Row="3" Cursor="Hand" MouseLeftButtonDown="groupShowing" Background="#00000000">
                 <Image Width="30" Height="30" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="5,0,0,0" Source="/icons8-хор-30.png"/>
-                <Label HorizontalAlignment="Left" Content="Group" Foreground="#FFA7A6A6" FontSize="22" Height="40" VerticalAlignment="Center" Margin="40,0,0,0" />
+                <Label HorizontalAlignment="Left" Content="Groups" Foreground="#FFA7A6A6" FontSize="22" Height="40" VerticalAlignment="Center" Margin="40,0,0,0" />
             </Grid>
             <Grid Grid.Row="4" Cursor="Hand" MouseLeftButtonDown="musicianShowing" Background="#00000000">
                 <Image Width="30" Height="30" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="5,0,0,0" Source="/icons8-микрофон-30.png"/>
-                <Label HorizontalAlignment="Left" Content="Musician" Foreground="#FFA7A6A6" FontSize="22" Height="40" VerticalAlignment="Center" Margin="40,0,0,0" />
+                <Label HorizontalAlignment="Left" Content="Musicians" Foreground="#FFA7A6A6" FontSize="22" Height="40" VerticalAlignment="Center" Margin="40,0,0,0" />
             </Grid>
             <Grid Grid.Row="5" MouseLeftButtonDown="diskShowing" Cursor="Hand" Background="#00000000">
                 <Image Width="30" Height="30" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="5,0,0,0" Source="/icons8-пластинка-30.png"/>
-                <Label HorizontalAlignment="Left" Content="Disk" Foreground="#FFA7A6A6" FontSize="22" Height="40" VerticalAlignment="Center" Margin="40,0,0,0" />
+                <Label HorizontalAlignment="Left" Content="Disks" Foreground="#FFA7A6A6" FontSize="22" Height="40" VerticalAlignment="Center" Margin="40,0,0,0" />
             </Grid>
             <Grid Grid.Row="6" Visibility="Hidden">
                 <Image Width="30" Height="30" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="5,0,0,0" Source="/icons8-настройки-30.png"/>
@@ -52,34 +128,34 @@
         </Grid>
         <Grid x:Name="menuShowTabs" Grid.Column="1">
             <Grid x:Name="musicShow" Background="#FF96FBB0" Margin="0,0,0,0" Visibility="Visible">
-                <Border ToolTip="Track search" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400" Height="40" Margin="0,20,175,0" CornerRadius="10,10,10,10" Background="White" BorderBrush="#FF727272" BorderThickness="1,1,1,1" Cursor="Hand">
+                <Border ToolTip="Search" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400" Height="40" Margin="0,20,175,0" CornerRadius="10,10,10,10" Background="White" BorderBrush="#FF727272" BorderThickness="1,1,1,1" Cursor="Hand">
                     <Grid Margin="5,0,5,0">
                         <ComboBox x:Name="musicSearchList" FontSize="24" Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" Height="36" Width="386" HorizontalAlignment="Center" SelectionChanged="musicSearchList_SelectionChanged"/>
                         <TextBox x:Name="musicSearchText" BorderBrush="{x:Null}" Background="White" Text="" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="24" Width="388" Height="38" KeyUp="musicSearchText_KeyUp" MaxLength="22" MaxLines="1" IsUndoEnabled="False" />
                     </Grid>
                 </Border>
-                <Border x:Name="musicAddBtn" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="350,20,0,0" Height="40" Width="75" Background="#FF00FF90" BorderBrush="White" BorderThickness="1,1,1,1" CornerRadius="10,10,10,10" Cursor="Hand" MouseLeftButtonDown="addWindowOpen">
+                <Border x:Name="musicAddBtn" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="350,20,0,0" Height="40" Width="75" Style="{StaticResource addButtonMenu}">
                     <Label Content="Add" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
                 </Border>
                 <Label x:Name="musicName" Content="Name" FontSize="36" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,78,0,0"/>
                 <Label Content="Groups" FontSize="24" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,152,0,0"/>
                 <Label Content="Genres" FontSize="24" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="351,152,0,0"/>
                 <Border HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Margin="50,190,0,0" Height="175" Background="#FF00FF90" CornerRadius="10,10,10,10">
-                    <DataGrid x:Name="groupListDataGrid" Margin="5,5,5,5" FontSize="16" ColumnWidth="190" MinColumnWidth="190" MaxColumnWidth="190" MaxWidth="190" MinWidth="190" ColumnHeaderHeight="0" HeadersVisibility="None" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" SelectionMode="Single" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" IsReadOnly="True" SelectedCellsChanged="groupListDataGrid_SelectedCellsChanged"/>
+                    <DataGrid x:Name="groupListDataGrid" ToolTip="Click to see more information about selected group" HorizontalScrollBarVisibility="Hidden" DisplayMemberPath="Name" Style="{StaticResource dataGridBaseStyle}" SelectedCellsChanged="groupListDataGrid_SelectedCellsChanged"/>
                 </Border>
                 <Border VerticalAlignment="Top" Margin="350,190,50,0" Height="175" Background="#FF00FF90" CornerRadius="10,10,10,10">
-                    <DataGrid x:Name="genreListDataGrid" Margin="5,5,5,5" FontSize="16" ColumnWidth="190" MinColumnWidth="190" MaxColumnWidth="190" MaxWidth="190" MinWidth="190" ColumnHeaderHeight="0" HeadersVisibility="None" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" SelectionMode="Single" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" IsReadOnly="True"/>
+                    <DataGrid x:Name="genreListDataGrid" HorizontalScrollBarVisibility="Hidden" DisplayMemberPath="Name" Style="{StaticResource dataGridBaseStyle}"/>
                 </Border>
-                <Border x:Name="musicChangeBtn" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="300,0,0,60" Height="40" Width="150" Background="#FF00FF90" BorderBrush="White" BorderThickness="1,1,1,1" CornerRadius="10,10,10,10" Cursor="Hand" MouseLeftButtonDown="musicChange">
+                <Border x:Name="musicChangeBtn" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="300,0,0,60"  Style="{StaticResource changeButtonMenu}">
                     <Label Content="Change" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
                 </Border>
-                <Border x:Name="musicDeleteBtn" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,300,60" Height="40" Width="150" Background="#FF00FF90" BorderBrush="White" BorderThickness="1,1,1,1" CornerRadius="10,10,10,10" Cursor="Hand" MouseLeftButtonDown="deleteMusic">
+                <Border x:Name="musicDeleteBtn" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,300,60" Style="{StaticResource deleteButtonMenu}">
                     <Label Content="Delete" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
                 </Border>
-                <Border VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="300,0,0,10" Height="40" Width="150" Background="#FF00FF90" BorderBrush="White" BorderThickness="1,1,1,1" CornerRadius="10,10,10,10" MouseLeftButtonDown="rightItem" Cursor="Hand">
+                <Border VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="300,0,0,10" Style="{StaticResource rightItemButton}">
                     <Label Content="-&gt;" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
                 </Border>
-                <Border VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,300,10" Height="40" Width="150" Background="#FF00FF90" BorderBrush="White" BorderThickness="1,1,1,1" CornerRadius="10,10,10,10" MouseLeftButtonDown="leftItem" Cursor="Hand">
+                <Border VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,300,10" Style="{StaticResource leftItemButton}">
                     <Label Content="&lt;-" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
                 </Border>
                 <Grid x:Name="musicChangeWindow" Background="#4CAFFF92" Visibility="Hidden">
@@ -89,32 +165,32 @@
                             <TextBox x:Name="musicChangeLabel" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="90,10,0,0" Foreground="Black" FontSize="24" Background="{x:Null}" BorderBrush="{x:Null}" Height="42" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Width="297" TextChanged="nameChanged"/>
                             <Label Content="Group" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,55,0,0" Foreground="Black" FontSize="16"/>
                             <ComboBox x:Name="groupToAdd" Width="150" Height="40" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,-4" FontSize="16" VerticalContentAlignment="Center" DisplayMemberPath="Name"/>
-                            <Border x:Name="groupAddBtn" Height="40" Width="75" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="170,0,0,0" Background="#FF52FFAE" CornerRadius="10,10,10,10" BorderBrush="White" BorderThickness="1,1,1,1" MouseLeftButtonDown="addItem1" Cursor="Hand">
+                            <Border x:Name="groupAddBtn" Height="40" Width="75" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="170,0,0,0" Style="{StaticResource buttonBase}"  MouseLeftButtonDown="addItem1">
                                 <Label Content="Add" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                             </Border>
                             <ComboBox x:Name="groupToDelete" Width="150" Height="40" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,100,0,0" FontSize="16" VerticalContentAlignment="Center" DisplayMemberPath="Name"/>
-                            <Border Height="40" Width="75" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="170,100,0,0" Background="#FF52FFAE" CornerRadius="10,10,10,10" BorderBrush="White" BorderThickness="1,1,1,1" MouseLeftButtonDown="DeleteItem1" Cursor="Hand">
+                            <Border Height="40" Width="75" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="170,100,0,0" Style="{StaticResource buttonBase}" MouseLeftButtonDown="DeleteItem1">
                                 <Label Content="Delete" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                             </Border>
                             <Label Content="Genre" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="50,55,0,0" Foreground="Black" FontSize="16"/>
                             <ComboBox x:Name="genreToAdd" Width="150" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="150,0,0,0" FontSize="16" VerticalContentAlignment="Center" DisplayMemberPath="Name"/>
-                            <Border x:Name="genreAddBtn" Height="40" Width="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="390,0,0,0" Background="#FF52FFAE" CornerRadius="10,10,10,10" BorderBrush="White" BorderThickness="1,1,1,1" MouseLeftButtonDown="addItem2" Cursor="">
+                            <Border x:Name="genreAddBtn" Height="40" Width="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="390,0,0,0" Style="{StaticResource buttonBase}" MouseLeftButtonDown="addItem2">
                                 <Label Content="Add" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                             </Border>
                             <ComboBox x:Name="genreToDelete" Width="150" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="150,100,0,0" FontSize="16" VerticalContentAlignment="Center" DisplayMemberPath="Name"/>
-                            <Border x:Name="genreDeleteBtn" Height="40" Width="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="390,100,0,0" Background="#FF52FFAE" CornerRadius="10,10,10,10" BorderBrush="White" BorderThickness="1,1,1,1" MouseLeftButtonDown="DeleteItem2" Cursor="Hand">
+                            <Border x:Name="genreDeleteBtn" Height="40" Width="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="390,100,0,0" Style="{StaticResource buttonBase}" MouseLeftButtonDown="DeleteItem2">
                                 <Label Content="Delete" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                             </Border>
-                            <Border Height="40" Width="75" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="390,10,0,0" Background="#FF52FFAE" CornerRadius="10,10,10,10" BorderBrush="White" BorderThickness="1,1,1,1" MouseLeftButtonDown="changeWindowClose" Cursor="Hand">
+                            <Border HorizontalAlignment="Center" VerticalAlignment="Top" Margin="390,10,0,0" Style="{StaticResource BackChangeButton}">
                                 <Label Content="Back" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                             </Border>
                         </Grid>
                     </Border>
                 </Grid>
-                <Grid x:Name="musicAddWindow" Background="#334FDD48" Visibility="Hidden">
-                    <Border Width="300" Height="299" Background="#FF00FF75" CornerRadius="10,10,10,10">
+                <Grid x:Name="musicAddWindow" Background="#4CAFFF92" Visibility="Hidden">
+                    <Border Width="300" Height="299" Background="#FF66FF96" CornerRadius="10,10,10,10">
                         <Grid>
-                            <Label HorizontalAlignment="Center" VerticalAlignment="Top" Content="New music" FontSize="36" Margin="0,10,0,0" />
+                            <Label HorizontalAlignment="Center" VerticalAlignment="Top" Content="New track" FontSize="36" Margin="0,10,0,0" />
                             <Label Width="200" Height="40" FontSize="16" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,62,0,0" Content="Name"/>
                             <Label Width="200" Height="40" FontSize="16" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,115,0,0" Content="Record Condition"/>
                             <TextBox x:Name="musicAddText" Width="200" Height="40" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,90"/>
@@ -122,10 +198,10 @@
                                 <System:String>Studio</System:String>
                                 <System:String>Concert</System:String>
                             </ComboBox>
-                            <Border x:Name="musicAddAddBtn" Width="200" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,125,0,0" Background="#FF4AFFB7" BorderBrush="White" CornerRadius="10,10,10,10" BorderThickness="1,1,1,1" Cursor="Hand" MouseLeftButtonDown="newMusicAdded">
+                            <Border x:Name="musicAddAddBtn" Width="200" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,125,0,0" Style="{StaticResource buttonBase}" MouseLeftButtonDown="newMusicAdded">
                                 <Label FontSize="24" Content="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
-                            <Border x:Name="musicAddBackBtn" Width="200" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,225,0,0" Background="#FF4AFFB7" BorderBrush="White" CornerRadius="10,10,10,10" BorderThickness="1,1,1,1" Cursor="Hand" MouseLeftButtonDown="addWindowClose">
+                            <Border x:Name="musicAddBackBtn" Width="200" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,225,0,0" Style="{StaticResource buttonBase}" MouseLeftButtonDown="addWindowClose">
                                 <Label FontSize="24" Content="Back" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                         </Grid>
@@ -134,13 +210,13 @@
                 <Label x:Name="musicRec" Content="Name" FontSize="16" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="22,121,0,0"/>
             </Grid>
             <Grid x:Name="coverShow" Background="#FF96FBB0" Margin="0,0,0,0" Visibility="Hidden">
-                <Border VerticalAlignment="Top" HorizontalAlignment="Center" Width="400" Height="40" Margin="0,20,150,0" CornerRadius="10,10,10,10" Background="White" BorderBrush="#FF727272" BorderThickness="1,1,1,1">
+                <Border ToolTip="Search" VerticalAlignment="Top" HorizontalAlignment="Center" Width="400" Height="40" Margin="0,20,150,0" CornerRadius="10,10,10,10" Background="White" BorderBrush="#FF727272" BorderThickness="1,1,1,1">
                     <Grid Margin="5,0,5,0">
                         <ComboBox x:Name="coverSearchList" FontSize="24" Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" Height="36" Width="386" HorizontalAlignment="Center" SelectionChanged="musicSearchList_SelectionChanged"/>
                         <TextBox x:Name="coverSearchText" BorderBrush="{x:Null}" Background="White" Text="" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="24" Width="388" Height="38" KeyUp="musicSearchText_KeyUp" MaxLength="22" MaxLines="1" IsUndoEnabled="False" />
                     </Grid>
                 </Border>
-                <Border x:Name="coverAddBtn" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="350,20,0,0" Height="40" Width="75" Background="#FF00FF90" BorderBrush="White" BorderThickness="1,1,1,1" CornerRadius="10,10,10,10" Cursor="Hand" MouseLeftButtonDown="addWindowOpen">
+                <Border x:Name="coverAddBtn" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="350,20,0,0" Style="{StaticResource addButtonMenu}">
                     <Label Content="Add" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
                 </Border>
                 <Label x:Name="coverName" Content="Name" FontSize="36" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,250"/>
@@ -148,37 +224,40 @@
                 <Label x:Name="coverSellsThisYear" Content="This year:" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,75"/>
                 <Label x:Name="coverSellsLastYear" Content="Last year:" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0"/>
                 <Label x:Name="coverSellsAllTime" Content="All time:" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,75,0,0"/>
-                <Border x:Name="coverChangeBtn" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,75" Height="40" Width="150" Background="#FF00FF90" BorderBrush="White" BorderThickness="1,1,1,1" CornerRadius="10,10,10,10" Cursor="Hand" MouseLeftButtonDown="musicChange">
+                <Border VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,200,0,0" Style="{StaticResource buttonBase}" MouseLeftButtonDown="leadersShowing" Height="40" Width="150">
+                    <Label Content="Leaders" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
+                </Border>
+                <Border x:Name="coverChangeBtn" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,75" Style="{StaticResource changeButtonMenu}">
                     <Label Content="Change" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
                 </Border>
-                <Border x:Name="coverDeleteBtn" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,400,75" Height="40" Width="150" Background="#FF00FF90" BorderBrush="White" BorderThickness="1,1,1,1" CornerRadius="10,10,10,10" Cursor="Hand" MouseLeftButtonDown="deleteMusic">
+                <Border x:Name="coverDeleteBtn" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,400,75" Style="{StaticResource deleteButtonMenu}">
                     <Label Content="Delete" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
                 </Border>
-                <Border VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,20" Height="40" Width="150" Background="#FF00FF90" BorderBrush="White" BorderThickness="1,1,1,1" CornerRadius="10,10,10,10" MouseLeftButtonDown="rightItem" Cursor="Hand">
+                <Border VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,20" Style="{StaticResource rightItemButton}">
                     <Label Content="-&gt;" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
                 </Border>
-                <Border VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,400,20" Height="40" Width="150" Background="#FF00FF90" BorderBrush="White" BorderThickness="1,1,1,1" CornerRadius="10,10,10,10" MouseLeftButtonDown="leftItem" Cursor="Hand">
+                <Border VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,400,20" Style="{StaticResource leftItemButton}">
                     <Label Content="&lt;-" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
                 </Border>
-                <Label Content="Music" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="402,149,0,0" FontSize="18"/>
-                <Border HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Margin="0,150,10,0" Height="300" Background="#FF00FF90" CornerRadius="10,10,10,10">
-                    <DataGrid x:Name="musicGridInCover" Margin="5,5,5,5" FontSize="16" MinColumnWidth="180" HeadersVisibility="None" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" SelectionUnit="Cell" SelectionMode="Single" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" IsReadOnly="True" HorizontalScrollBarVisibility="Auto" GridLinesVisibility="Horizontal" SelectedCellsChanged="groupListDataGrid_SelectedCellsChanged" DisplayMemberPath="Name"/>
+                <Label Content="Tracks in this playlist" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="390,150,0,0" FontSize="18"/>
+                <Border HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Margin="0,160,10,0" Height="300" Background="#FF00FF90" CornerRadius="10,10,10,10">
+                    <DataGrid x:Name="musicGridInCover" ToolTip="Click to see more information about selected track" ScrollViewer.VerticalScrollBarVisibility="Auto" ColumnWidth="250" HorizontalScrollBarVisibility="Auto" SelectedCellsChanged="groupListDataGrid_SelectedCellsChanged" DisplayMemberPath="Name" Style="{StaticResource dataGridBaseStyle}"/>
                 </Border>
                 <Grid x:Name="coverChangeWindow" Background="#4CAFFF92" Visibility="Hidden">
                     <Border CornerRadius="10,10,10,10" Background="#FF66FF96" VerticalAlignment="Center" HorizontalAlignment="Center" Width="500" Height="300">
                         <Grid>
                             <Label  Content="Name:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,0,0" Foreground="Black" FontSize="24" Height="42"/>
                             <TextBox x:Name="coverChangeLabel" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="90,10,0,0" Foreground="Black" FontSize="24" Background="{x:Null}" BorderBrush="{x:Null}" Height="42" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Width="297" TextChanged="nameChanged" MaxLines="1" IsUndoEnabled="False"/>
-                            <Label Content="Music" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,75,0,0" Foreground="Black" FontSize="16"/>
+                            <Label Content="Track" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,75,0,0" Foreground="Black" FontSize="16"/>
                             <ComboBox x:Name="musicToAdd" Width="150" Height="40" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,50" VerticalContentAlignment="Center" DisplayMemberPath="Name"/>
-                            <Border x:Name="musicToCoverAddBtn" Height="40" Width="75" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="170,0,0,50" Background="#FF52FFAE" CornerRadius="10,10,10,10" BorderBrush="White" BorderThickness="1,1,1,1" MouseLeftButtonDown="addItem1" Cursor="Hand">
+                            <Border x:Name="musicToCoverAddBtn" Height="40" Width="75" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="170,0,0,50" MouseLeftButtonDown="addItem1" Style="{StaticResource buttonBase}">
                                 <Label Content="Add" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                             </Border>
                             <ComboBox x:Name="musicToDelete" Width="150" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="150,0,0,50" VerticalContentAlignment="Center" DisplayMemberPath="Name"/>
-                            <Border Height="40" Width="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="390,0,0,50" Background="#FF52FFAE" CornerRadius="10,10,10,10" BorderBrush="White" BorderThickness="1,1,1,1" MouseLeftButtonDown="DeleteItem1" Cursor="Hand">
+                            <Border Height="40" Width="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="390,0,0,50" Style="{StaticResource buttonBase}" MouseLeftButtonDown="DeleteItem1">
                                 <Label Content="Delete" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MouseLeftButtonDown="DeleteItem1"/>
                             </Border>
-                            <Border Height="40" Width="75" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="390,10,0,0" Background="#FF52FFAE" CornerRadius="10,10,10,10" BorderBrush="White" BorderThickness="1,1,1,1" Cursor="Hand" MouseLeftButtonDown="changeWindowClose">
+                            <Border HorizontalAlignment="Center" VerticalAlignment="Top" Margin="390,10,0,0" Style="{StaticResource BackChangeButton}">
                                 <Label Content="Back" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                             </Border>
                             <Label FontSize="24" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Price:" Margin="10,60,0,0"/>
@@ -192,15 +271,16 @@
                         </Grid>
                     </Border>
                 </Grid>
-                <Grid x:Name="coverAddWindow" Background="#334FDD48" Visibility="Hidden">
-                    <Border Width="300" Height="250" Background="#FF00FF75" CornerRadius="10,10,10,10">
+                <Grid x:Name="coverAddWindow" Background="#4CAFFF92" Visibility="Hidden">
+                    <Border Width="300" Height="300" Background="#FF66FF96" CornerRadius="10,10,10,10">
                         <Grid>
-                            <Label HorizontalAlignment="Center" VerticalAlignment="Top" Content="New cover" FontSize="36" Margin="0,10,0,0" />
-                            <TextBox x:Name="coverAddText" Width="200" Height="40" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,70"/>
-                            <Border x:Name="coverAddAddBtn" Width="200" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,50,0,0" Background="#FF4AFFB7" BorderBrush="White" CornerRadius="10,10,10,10" BorderThickness="1,1,1,1" MouseLeftButtonDown="newMusicAdded" Cursor="Hand">
+                            <Label HorizontalAlignment="Center" VerticalAlignment="Top" Content="New playlist" FontSize="36" Margin="0,20,0,0" />
+                            <Label Content="Name" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,150,105"/>
+                            <TextBox x:Name="coverAddText" Width="200" Height="40" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,40"/>
+                            <Border x:Name="coverAddAddBtn" Width="200" Height="45" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,100,0,0" MouseLeftButtonDown="newMusicAdded" Style="{StaticResource buttonBase}">
                                 <Label FontSize="24" Content="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
-                            <Border x:Name="coverAddBackBtn" Width="200" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,175,0,0" Background="#FF4AFFB7" BorderBrush="White" CornerRadius="10,10,10,10" BorderThickness="1,1,1,1" MouseLeftButtonDown="addWindowClose" Cursor="Hand">
+                            <Border x:Name="coverAddBackBtn" Width="200" Height="45" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,225,0,0" MouseLeftButtonDown="addWindowClose" Style="{StaticResource buttonBase}">
                                 <Label FontSize="24" Content="Back" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                         </Grid>
@@ -208,47 +288,54 @@
                 </Grid>
             </Grid>
             <Grid x:Name="groupShow" Background="#FF96FBB0" Margin="0,0,0,0" Visibility="Hidden">
-                <Border VerticalAlignment="Top" HorizontalAlignment="Center" Width="400" Height="40" Margin="0,20,150,0" CornerRadius="10,10,10,10" Background="White" BorderBrush="#FF727272" BorderThickness="1,1,1,1">
+                <Border ToolTip="Search" VerticalAlignment="Top" HorizontalAlignment="Center" Width="400" Height="40" Margin="0,20,150,0" CornerRadius="10,10,10,10" Background="White" BorderBrush="#FF727272" BorderThickness="1,1,1,1">
                     <Grid Margin="5,0,5,0">
                         <ComboBox x:Name="groupSearchList" FontSize="24" Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" Height="36" Width="386" HorizontalAlignment="Center" SelectionChanged="musicSearchList_SelectionChanged"/>
                         <TextBox x:Name="groupSearchText" BorderBrush="{x:Null}" Background="White" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="24" Width="388" Height="38" KeyUp="musicSearchText_KeyUp" MaxLines="1" MaxLength="22" IsUndoEnabled="False" />
                     </Grid>
                 </Border>
-                <Border x:Name="groupNewAddBtn" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="350,20,0,0" Height="40" Width="75" Background="#FF00FF90" BorderBrush="White" BorderThickness="1,1,1,1" CornerRadius="10,10,10,10" Cursor="Hand" MouseLeftButtonDown="addWindowOpen">
+                <Border x:Name="groupNewAddBtn" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="350,20,0,0" Style="{StaticResource addButtonMenu}">
                     <Label Content="Add" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
                 </Border>
                 <Label x:Name="groupName" Content="Name" FontSize="36" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,250"/>
                 <Label x:Name="groupType" Content="Type:" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,140"/>
-                <Border x:Name="grupChangeBtn" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,30,75" Height="40" Width="150" Background="#FF00FF90" BorderBrush="White" BorderThickness="1,1,1,1" CornerRadius="10,10,10,10" Cursor="Hand" MouseLeftButtonDown="musicChange">
+                <Border x:Name="grupChangeBtn" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,75" Style="{StaticResource changeButtonMenu}">
                     <Label Content="Change" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
                 </Border>
-                <Border x:Name="groupDeleteBtn" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,400,75" Height="40" Width="150" Background="#FF00FF90" BorderBrush="White" BorderThickness="1,1,1,1" CornerRadius="10,10,10,10" Cursor="Hand" MouseLeftButtonDown="deleteMusic">
+                <Border x:Name="groupDeleteBtn" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,400,75" Style="{StaticResource deleteButtonMenu}">
                     <Label Content="Delete" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
                 </Border>
-                <Border VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,30,20" Height="40" Width="150" Background="#FF00FF90" BorderBrush="White" BorderThickness="1,1,1,1" CornerRadius="10,10,10,10" MouseLeftButtonDown="rightItem" Cursor="Hand">
+                <Border VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,200,400,0" Style="{StaticResource buttonBase}" MouseLeftButtonDown="tracksShowing" Width="150" Height="40">
+                    <Label Content="Tracks" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
+                </Border>
+                <Border VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,200,0,0" Style="{StaticResource buttonBase}" MouseLeftButtonDown="disksShowing" Height="40" Width="150">
+                    <Label Content="Disks" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
+                </Border>
+                <Border VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,20" Style="{StaticResource rightItemButton}">
                     <Label Content="-&gt;" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
                 </Border>
-                <Border VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,400,20" Height="40" Width="150" Background="#FF00FF90" BorderBrush="White" BorderThickness="1,1,1,1" CornerRadius="10,10,10,10" Cursor="Hand" MouseLeftButtonDown="leftItem">
+                <Border VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,400,20" Style="{StaticResource leftItemButton}">
                     <Label Content="&lt;-" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
                 </Border>
-                <Border HorizontalAlignment="Center" VerticalAlignment="Center" Width="200" Margin="0,150,0,0" Height="250" Background="#FF00FF90" CornerRadius="10,10,10,10">
-                    <DataGrid x:Name="groupMusicianList" Margin="5,5,5,5" FontSize="16" MinColumnWidth="0" HeadersVisibility="None" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" SelectionUnit="FullRow" SelectionMode="Extended" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" IsReadOnly="True" HorizontalScrollBarVisibility="Auto" GridLinesVisibility="Horizontal" FlowDirection="LeftToRight" HorizontalContentAlignment="Center" SelectedCellsChanged="groupListDataGrid_SelectedCellsChanged"/>
+                <Label Content="Group members" FontSize="16" VerticalAlignment="Center" Margin="0,0,60,160" Width="150" HorizontalAlignment="Right"/>
+                <Border HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="200" Margin="0,0,10,20" Height="300" Background="#FF00FF90" CornerRadius="10,10,10,10">
+                    <DataGrid x:Name="groupMusicianList" ToolTip="Click to see more information about selected group member" Style="{StaticResource dataGridBaseStyle}" ScrollViewer.VerticalScrollBarVisibility="Auto" SelectionUnit="FullRow" SelectionMode="Extended" HorizontalScrollBarVisibility="Auto" FlowDirection="LeftToRight" HorizontalContentAlignment="Center" SelectedCellsChanged="groupListDataGrid_SelectedCellsChanged"/>
                 </Border>
                 <Grid x:Name="groupChangeWindow" Background="#4CAFFF92" Visibility="Hidden">
                     <Border CornerRadius="10,10,10,10" Background="#FF66FF96" VerticalAlignment="Center" HorizontalAlignment="Center" Width="500" Height="200">
                         <Grid>
-                            <Label  Content="Name:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,0,0" Foreground="Black" FontSize="24" Height="42"/>
+                            <Label Content="Name:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,0,0" Foreground="Black" FontSize="24" Height="42"/>
                             <TextBox x:Name="groupChangeLabel" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="90,10,0,0" Foreground="Black" FontSize="24" Background="{x:Null}" BorderBrush="{x:Null}" Height="42" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Width="297" TextChanged="nameChanged"/>
                             <Label Content="Musician" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,50,0,0" Foreground="Black" FontSize="16"/>
                             <ComboBox x:Name="musicianToAdd" Width="150" Height="40" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,40,0,50" FontSize="16" VerticalContentAlignment="Center" DisplayMemberPath="Name"/>
-                            <Border x:Name="musicianToAddBtn" Height="40" Width="75" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="170,40,0,50" Background="#FF52FFAE" CornerRadius="10,10,10,10" BorderBrush="White" BorderThickness="1,1,1,1" Cursor="Hand" MouseLeftButtonDown="addItem1">
+                            <Border x:Name="musicianToAddBtn" Height="40" Width="75" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="170,40,0,50" Style="{StaticResource buttonBase}" MouseLeftButtonDown="addItem1">
                                 <Label Content="Add" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                             </Border>
                             <ComboBox x:Name="musicianToDelete" Width="150" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="150,40,0,50" FontSize="16" VerticalContentAlignment="Center" DisplayMemberPath="Name"/>
-                            <Border Height="40" Width="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="390,40,0,50" Background="#FF52FFAE" CornerRadius="10,10,10,10" BorderBrush="White" BorderThickness="1,1,1,1" Cursor="Hand" MouseLeftButtonDown="DeleteItem1">
+                            <Border Height="40" Width="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="390,40,0,50" Style="{StaticResource buttonBase}" MouseLeftButtonDown="DeleteItem1">
                                 <Label Content="Delete" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                             </Border>
-                            <Border Height="40" Width="75" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="390,10,0,0" Background="#FF52FFAE" CornerRadius="10,10,10,10" BorderBrush="White" BorderThickness="1,1,1,1" Cursor="Hand" MouseLeftButtonDown="changeWindowClose">
+                            <Border Height="40" Width="75" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="390,10,0,0" Style="{StaticResource buttonBase}" MouseLeftButtonDown="changeWindowClose">
                                 <Label Content="Back" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                             </Border>
                             <Label Content="Type:" VerticalAlignment="Bottom" HorizontalAlignment="Left" FontSize="18" Margin="124,0,0,20" />
@@ -263,8 +350,8 @@
                         </Grid>
                     </Border>
                 </Grid>
-                <Grid x:Name="groupAddWindow" Background="#334FDD48" Visibility="Hidden">
-                    <Border Width="300" Height="299" Background="#FF00FF75" CornerRadius="10,10,10,10">
+                <Grid x:Name="groupAddWindow" Background="#4CAFFF92" Visibility="Hidden">
+                    <Border Width="300" Height="300" Background="#FF66FF96" CornerRadius="10,10,10,10">
                         <Grid>
                             <Label HorizontalAlignment="Center" VerticalAlignment="Top" Content="New group" FontSize="36" Margin="0,10,0,0" />
                             <TextBox x:Name="groupAddText" Width="200" Height="40" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,90"/>
@@ -276,10 +363,10 @@
                                 <System:String>Сlassical orchestra</System:String>
                                 <System:String>Jass group</System:String>
                             </ComboBox>
-                            <Border x:Name="groupAddAddBtn" Width="200" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,125,0,0" Background="#FF4AFFB7" BorderBrush="White" CornerRadius="10,10,10,10" BorderThickness="1,1,1,1" Cursor="Hand" MouseLeftButtonDown="newMusicAdded">
+                            <Border x:Name="groupAddAddBtn" Width="200" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,125,0,0" Style="{StaticResource buttonBase}" MouseLeftButtonDown="newMusicAdded">
                                 <Label FontSize="24" Content="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
-                            <Border x:Name="groupAddBackBtn" Width="200" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,225,0,0" Background="#FF4AFFB7" BorderBrush="White" CornerRadius="10,10,10,10" BorderThickness="1,1,1,1" Cursor="Hand" MouseLeftButtonDown="addWindowClose">
+                            <Border x:Name="groupAddBackBtn" Width="200" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,225,0,0" Style="{StaticResource buttonBase}" MouseLeftButtonDown="addWindowClose">
                                 <Label FontSize="24" Content="Back" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                         </Grid>
@@ -287,37 +374,37 @@
                 </Grid>
             </Grid>
             <Grid x:Name="musicianShow" Background="#FF96FBB0" Margin="0,0,0,0" Visibility="Hidden">
-                <Border VerticalAlignment="Top" HorizontalAlignment="Center" Width="400" Height="40" Margin="0,20,150,0" CornerRadius="10,10,10,10" Background="White" BorderBrush="#FF727272" BorderThickness="1,1,1,1">
+                <Border ToolTip="Search" VerticalAlignment="Top" HorizontalAlignment="Center" Width="400" Height="40" Margin="0,20,150,0" CornerRadius="10,10,10,10" Background="White" BorderBrush="#FF727272" BorderThickness="1,1,1,1">
                     <Grid Margin="5,0,5,0">
                         <ComboBox x:Name="musicianSearchList" FontSize="24" Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" Height="36" Width="386" HorizontalAlignment="Center" SelectionChanged="musicSearchList_SelectionChanged"/>
                         <TextBox x:Name="musicianSearchText" BorderBrush="{x:Null}" Background="White" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="24" Width="388" Height="38" MaxLength="22" MaxLines="1" IsUndoEnabled="False" KeyUp="musicSearchText_KeyUp" />
                     </Grid>
                 </Border>
-                <Border x:Name="musicianNewAddBtn" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="350,20,0,0" Height="40" Width="75" Background="#FF00FF90" BorderBrush="White" BorderThickness="1,1,1,1" CornerRadius="10,10,10,10" Cursor="Hand" MouseLeftButtonDown="addWindowOpen">
+                <Border x:Name="musicianNewAddBtn" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="350,20,0,0" Style ="{StaticResource addButtonMenu}">
                     <Label Content="Add" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
                 </Border>
-                <Label x:Name="musicianName" Content="Name" FontSize="48" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,250"/>
-                <Label x:Name="musicianGroup" Content="" FontSize="24" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,145,0,0"/>
-                <Border x:Name="musicianChangeBtn" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,30,75" Height="40" Width="150" Background="#FF00FF90" BorderBrush="White" BorderThickness="1,1,1,1" CornerRadius="10,10,10,10" Cursor="Hand" MouseLeftButtonDown="musicChange">
+                <Label x:Name="musicianName" Content="Name" FontSize="36" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,78,0,0"/>
+                <Label x:Name="musicianGroup" Content="Name" FontSize="16" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,121,0,0"/>
+                <Border x:Name="musicianChangeBtn" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="300,0,0,60" Style="{StaticResource changeButtonMenu}">
                     <Label Content="Change" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
                 </Border>
-                <Border x:Name="musicianDeleteBtn" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,400,75" Height="40" Width="150" Background="#FF00FF90" BorderBrush="White" BorderThickness="1,1,1,1" CornerRadius="10,10,10,10" Cursor="Hand" MouseLeftButtonDown="deleteMusic">
+                <Border x:Name="musicianDeleteBtn" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,300,60" Style="{StaticResource deleteButtonMenu}">
                     <Label Content="Delete" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
                 </Border>
-                <Border VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,30,20" Height="40" Width="150" Background="#FF00FF90" BorderBrush="White" BorderThickness="1,1,1,1" CornerRadius="10,10,10,10" MouseLeftButtonDown="rightItem" Cursor="Hand">
+                <Border VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="300,0,0,10" Style="{StaticResource rightItemButton}">
                     <Label Content="-&gt;" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
                 </Border>
-                <Border VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,400,20" Height="40" Width="150" Background="#FF00FF90" BorderBrush="White" BorderThickness="1,1,1,1" CornerRadius="10,10,10,10" Cursor="Hand" MouseLeftButtonDown="leftItem">
+                <Border VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,300,10" Style="{StaticResource leftItemButton}">
                     <Label Content="&lt;-" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
                 </Border>
-                <Border HorizontalAlignment="Right" VerticalAlignment="Top" Width="200" Margin="0,230,10,0" Height="150" Background="#FF00FF90" CornerRadius="10,10,10,10">
-                    <DataGrid x:Name="musicianOccupation" Margin="5,5,5,5" FontSize="16" ColumnWidth="190" MinColumnWidth="190" MaxColumnWidth="190" MaxWidth="250" ColumnHeaderHeight="0" HeadersVisibility="None" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" SelectionMode="Single" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" IsReadOnly="True" HorizontalScrollBarVisibility="Visible"/>
+                <Border HorizontalAlignment="Right" VerticalAlignment="Top" Width="200" Margin="0,190,50,0" Height="175" Background="#FF00FF90" CornerRadius="10,10,10,10">
+                    <DataGrid x:Name="musicianOccupation" Style="{StaticResource dataGridBaseStyle}"/>
                 </Border>
-                <Label Content="Works as:" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="390,196,0,0"/>
-                <Border HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Margin="10,230,0,0" Height="150" Background="#FF00FF90" CornerRadius="10,10,10,10">
-                    <DataGrid x:Name="musicianInstrument" Margin="5,5,5,5" FontSize="16" ColumnWidth="190" MinColumnWidth="190" MaxColumnWidth="190" MaxWidth="190" MinWidth="190" ColumnHeaderHeight="0" HeadersVisibility="None" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" SelectionMode="Single" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" IsReadOnly="True"/>
+                <Label Content="Works as" FontSize="24" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="350,155,0,0"/>
+                <Border HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Margin="50,190,0,0" Height="175" Background="#FF00FF90" CornerRadius="10,10,10,10">
+                    <DataGrid x:Name="musicianInstrument" Style="{StaticResource dataGridBaseStyle}"/>
                 </Border>
-                <Label Content="Can play:" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,196,0,0"/>
+                <Label Content="Can play" FontSize="24" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,155,0,0"/>
                 <Grid x:Name="musicianChangeWindow" Background="#4CAFFF92" Visibility="Hidden">
                     <Border CornerRadius="10,10,10,10" Background="#FF66FF96" VerticalAlignment="Center" HorizontalAlignment="Center" Width="500" Height="200">
                         <Grid>
@@ -325,38 +412,38 @@
                             <TextBox x:Name="musicianChangeLabel" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="90,10,0,0" Foreground="Black" FontSize="24" Background="{x:Null}" BorderBrush="{x:Null}" Height="42" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Width="297" MaxLines="1" Text="" MaxLength="18" IsUndoEnabled="False" TextChanged="nameChanged"/>
                             <Label Content="Instrument" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,50,0,0" Foreground="Black" FontSize="16"/>
                             <ComboBox x:Name="instrumentToAdd" Width="150" Height="40" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,40,0,50" VerticalContentAlignment="Center" FontSize="16" DisplayMemberPath="Name"/>
-                            <Border x:Name="instrumentToAddBtn" Height="40" Width="75" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="170,40,0,50" Background="#FF52FFAE" CornerRadius="10,10,10,10" BorderBrush="White" BorderThickness="1,1,1,1" Cursor="Hand" MouseLeftButtonDown="addItem1">
+                            <Border x:Name="instrumentToAddBtn" Height="40" Width="75" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="170,40,0,50" Style="{StaticResource buttonBase}" MouseLeftButtonDown="addItem1">
                                 <Label Content="Add" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                             </Border>
                             <ComboBox x:Name="instrumentToDelete" Width="150" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="150,40,0,50" VerticalContentAlignment="Center" FontSize="16" DisplayMemberPath="Name"/>
-                            <Border Height="40" Width="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="390,40,0,50" Background="#FF52FFAE" CornerRadius="10,10,10,10" BorderBrush="White" BorderThickness="1,1,1,1" MouseLeftButtonDown="DeleteItem1" Cursor="Hand">
+                            <Border Height="40" Width="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="390,40,0,50" Style="{StaticResource buttonBase}" MouseLeftButtonDown="DeleteItem1">
                                 <Label Content="Delete" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                             </Border>
-                            <Border Height="40" Width="75" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="390,10,0,0" Background="#FF52FFAE" CornerRadius="10,10,10,10" BorderBrush="White" BorderThickness="1,1,1,1" Cursor="Hand" MouseLeftButtonDown="changeWindowClose">
+                            <Border Height="40" Width="75" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="390,10,0,0" Style="{StaticResource BackChangeButton}">
                                 <Label Content="Back" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                             </Border>
                             <Label Content="Occupation" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,120,0,0" Foreground="Black" FontSize="16"/>
                             <ComboBox x:Name="occupationToAdd" Width="150" Height="40" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,140,0,0" FontSize="16" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" DisplayMemberPath="Name"/>
-                            <Border x:Name="occupationToAddBtn" Height="40" Width="75" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="170,140,0,0" Background="#FF52FFAE" CornerRadius="10,10,10,10" BorderBrush="White" BorderThickness="1,1,1,1" Cursor="Hand" MouseLeftButtonDown="addItem2">
+                            <Border x:Name="occupationToAddBtn" Height="40" Width="75" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="170,140,0,0" Style="{StaticResource buttonBase}" MouseLeftButtonDown="addItem2">
                                 <Label Content="Add" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                             </Border>
                             <ComboBox x:Name="occupationToDelete" Width="150" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="150,140,0,0" VerticalContentAlignment="Center" FontSize="16" DisplayMemberPath="Name"/>
-                            <Border Height="40" Width="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="390,140,0,0" Background="#FF52FFAE" CornerRadius="10,10,10,10" BorderBrush="White" BorderThickness="1,1,1,1" MouseLeftButtonDown="DeleteItem2" Cursor="Hand">
+                            <Border Height="40" Width="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="390,140,0,0" MouseLeftButtonDown="DeleteItem2" Style="{StaticResource buttonBase}">
                                 <Label Content="Delete" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                             </Border>
                         </Grid>
                     </Border>
                 </Grid>
-                <Grid x:Name="musicianAddWindow" Background="#334FDD48" Visibility="Hidden">
-                    <Border Width="300" Height="299" Background="#FF00FF75" CornerRadius="10,10,10,10">
+                <Grid x:Name="musicianAddWindow" Background="#4CAFFF92" Visibility="Hidden">
+                    <Border Width="300" Height="299" Background="#FF66FF96" CornerRadius="10,10,10,10">
                         <Grid>
                             <Label HorizontalAlignment="Center" VerticalAlignment="Top" Content="New musician" FontSize="36" Margin="0,10,0,0" />
                             <TextBox x:Name="musicianAddText" Width="200" Height="40" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,90"/>
                             <ComboBox x:Name="groupList" Width="200" Height="40" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,20,0,0" DisplayMemberPath="Name"/>
-                            <Border x:Name="musicianAddAddBtn" Width="200" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,125,0,0" Background="#FF4AFFB7" BorderBrush="White" CornerRadius="10,10,10,10" BorderThickness="1,1,1,1" Cursor="Hand" MouseLeftButtonDown="newMusicAdded">
+                            <Border x:Name="musicianAddAddBtn" Width="200" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,125,0,0" Style="{StaticResource buttonBase}" MouseLeftButtonDown="newMusicAdded">
                                 <Label FontSize="24" Content="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
-                            <Border x:Name="musicianAddBackBtn" Width="200" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,225,0,0" Background="#FF4AFFB7" BorderBrush="White" CornerRadius="10,10,10,10" BorderThickness="1,1,1,1" Cursor="Hand" MouseLeftButtonDown="addWindowClose">
+                            <Border x:Name="musicianAddBackBtn" Width="200" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,225,0,0" Style="{StaticResource buttonBase}" MouseLeftButtonDown="addWindowClose">
                                 <Label FontSize="24" Content="Back" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                         </Grid>
@@ -375,24 +462,24 @@
                 <Label Width="150" Height="40" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,248,10,0" Content="Selected ID" VerticalContentAlignment="Bottom" FontSize="18"/>
                 <Label Width="150" Height="75" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,12,10,0" Content="Disks" VerticalContentAlignment="Bottom" FontSize="36"/>
                 <ComboBox x:Name="selectedDiskList" Height="40" Width="150" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="440,288,0,0" VerticalContentAlignment="Center" DisplayMemberPath="ID" SelectedIndex="0" FontSize="16"/>
-                <Border x:Name="diskNewAddBtn" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="440,333,0,0" Height="40" Width="150" Background="#FF00FF90" BorderBrush="White" BorderThickness="1,1,1,1" CornerRadius="10,10,10,10" Cursor="Hand" MouseLeftButtonDown="addWindowOpen">
+                <Border x:Name="diskNewAddBtn" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="440,333,0,0" Width="150" Style="{StaticResource addButtonMenu}">
                     <Label Content="Add" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
                 </Border>
-                <Border x:Name="diskChangeBtn" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,378,10,0" Height="40" Width="150" Background="#FF00FF90" BorderBrush="White" BorderThickness="1,1,1,1" CornerRadius="10,10,10,10" Cursor="Hand" MouseLeftButtonDown="musicChange">
+                <Border x:Name="diskChangeBtn" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,378,10,0" Style="{StaticResource changeButtonMenu}">
                     <Label Content="Change" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
                 </Border>
-                <Border x:Name="diskDeleteBtn" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,423,10,0" Height="40" Width="150" Background="#FF00FF90" BorderBrush="White" BorderThickness="1,1,1,1" CornerRadius="10,10,10,10" Cursor="Hand" MouseLeftButtonDown="deleteMusic">
+                <Border x:Name="diskDeleteBtn" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,423,10,0" Style="{StaticResource deleteButtonMenu}">
                     <Label Content="Delete" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
                 </Border>
                 <Border HorizontalAlignment="Left" VerticalAlignment="Center" Width="425" Margin="10,0,0,0" Height="450" Background="#FF00FF90" CornerRadius="10,10,10,10">
                     <DataGrid x:Name="disksInfo" Margin="5,5,5,5" FontSize="16" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" SelectionMode="Single" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" IsReadOnly="True" HorizontalScrollBarVisibility="Auto" AutoGeneratingColumn="disksInfo_AutoGeneratingColumn" SelectedCellsChanged="disksInfo_SelectedCellsChanged"/>
                 </Border>
                 <Grid x:Name="diskChangeWindow" Background="#4CAFFF92" Visibility="Hidden">
-                    <Border CornerRadius="10,10,10,10" Background="#FF66FF96" VerticalAlignment="Center" HorizontalAlignment="Center" Width="500" Height="200">
+                    <Border CornerRadius="10" Background="#FF66FF96" VerticalAlignment="Center" HorizontalAlignment="Center" Width="500" Height="200">
                         <Grid>
                             <Label Content="Company creator" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,14,0,0" Foreground="Black" FontSize="16"/>
                             <ComboBox x:Name="creatorToAdd" Width="175" Height="40" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,39,0,0" DisplayMemberPath="Name" FontSize="14" VerticalContentAlignment="Center"/>
-                            <Border Height="40" Width="75" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="390,10,0,0" Background="#FF52FFAE" CornerRadius="10,10,10,10" BorderBrush="White" BorderThickness="1,1,1,1" Cursor="Hand" MouseLeftButtonDown="changeWindowClose">
+                            <Border HorizontalAlignment="Center" VerticalAlignment="Top" Margin="390,10,0,0" Style="{StaticResource BackChangeButton}">
                                 <Label Content="Back" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                             </Border>
                             <Label Content="Company seller" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" Foreground="Black" FontSize="16"/>
@@ -408,8 +495,8 @@
                         </Grid>
                     </Border>
                 </Grid>
-                <Grid x:Name="diskAddWindow" Background="#334FDD48" Visibility="Hidden">
-                    <Border Width="500" Height="400" Background="#FF00FF75" CornerRadius="10,10,10,10">
+                <Grid x:Name="diskAddWindow" Background="#4CAFFF92" Visibility="Hidden">
+                    <Border Width="500" Height="400" Background="#FF66FF96" CornerRadius="10,10,10,10">
                         <Grid>
                             <Label FontSize="16" Content="Cover" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="32,64,0,0"/>
                             <ComboBox x:Name="companySellerList" Width="200" Height="40" FontSize="16" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="32,223,0,0" DisplayMemberPath="Name" VerticalContentAlignment="Center"/>
@@ -418,10 +505,10 @@
                             <DatePicker x:Name="releaseDate" Height="40" FontSize="16" VerticalAlignment="Top" Margin="269,223,4,0" BorderBrush="{x:Null}" Padding="0,0,0,0" VerticalContentAlignment="Center"/>
                             <ComboBox x:Name="companyCreatorList" Width="200" Height="40" FontSize="16" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="32,160,0,0" DisplayMemberPath="Name" VerticalContentAlignment="Center"/>
                             <ComboBox x:Name="coverList" Width="200" Height="40" FontSize="16" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="32,89,0,0" DisplayMemberPath="Name" VerticalContentAlignment="Center"/>
-                            <Border x:Name="diskAddAddBtn" Width="200" Height="40" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,301,0,0" Background="#FF4AFFB7" BorderBrush="White" CornerRadius="10,10,10,10" BorderThickness="1,1,1,1" MouseLeftButtonDown="newMusicAdded" Cursor="Hand">
+                            <Border x:Name="diskAddAddBtn" Width="200" Height="40" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,301,0,0" Style="{StaticResource buttonBase}" MouseLeftButtonDown="newMusicAdded">
                                 <Label FontSize="24" Content="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
-                            <Border x:Name="diskAddBackBtn" Width="200" Height="40" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,350,0,0" Background="#FF4AFFB7" BorderBrush="White" CornerRadius="10,10,10,10" BorderThickness="1,1,1,1" Cursor="Hand" MouseLeftButtonDown="addWindowClose">
+                            <Border x:Name="diskAddBackBtn" Width="200" Height="40" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,350,0,0" Style="{StaticResource buttonBase}" MouseLeftButtonDown="addWindowClose">
                                 <Label FontSize="24" Content="Back" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                             <TextBox x:Name="WholesalePriceAddText" Height="40" FontSize="16" VerticalAlignment="Top" Margin="269,160,31,0"/>
@@ -435,8 +522,16 @@
                 </Grid>
             </Grid>
         </Grid>
-        
-        <Border Cursor="Hand" CornerRadius="10,10,10,10" Height="30" Width="30" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Background="#FF00FF90" BorderBrush="White" BorderThickness="1,1,1,1" Margin="0,10,10,0" MouseLeftButtonDown="exit">
+        <Grid x:Name="showWindow" Grid.Column="1" Background="#FF96FBB0" Visibility="Hidden">
+            <Grid>
+                <Label x:Name="showLabel" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,0,0" Height="40" Width="500" FontSize="24" Content="Test sample"/>
+                <DataGrid x:Name="showTable" HorizontalAlignment="Left" VerticalAlignment="Center" Height="400" Margin="10,0,10,0" Width="580" FontSize="16" IsReadOnly="True" CanUserReorderColumns="False" CanUserResizeColumns="False" AutoGeneratingColumn="disksInfo_AutoGeneratingColumn"/>
+                <Border  Style="{StaticResource buttonBase}" Height="40" Width="100" Cursor="Hand" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,5" MouseLeftButtonDown="backShowWindow">
+                    <Label Content="Back" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Margin="0,-2,0,2"/>
+                </Border>
+            </Grid>
+        </Grid>
+        <Border Height="30" Width="30" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,10,10,0" MouseLeftButtonDown="exit" Style="{StaticResource buttonBase}">
             <Label Content="X" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="Black" Background="{x:Null}" FontSize="16" Padding="0,0,0,0"/>
         </Border>
     </Grid>

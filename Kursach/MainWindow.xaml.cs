@@ -564,7 +564,7 @@ namespace Kursach
                         }
                     }
                     musicChanged();
-                    MessageBox.Show("The music named '" + musicAddText.Text + "' was successfuly added");
+                    MessageBox.Show("The track named '" + musicAddText.Text + "' was successfuly added");
                     musicAddList.SelectedIndex = 0;
                     musicAddText.Text = "";
                     musicAddWindow.Visibility = Visibility.Hidden;
@@ -587,7 +587,7 @@ namespace Kursach
                         }
                     }
                     musicChanged();
-                    MessageBox.Show("The cover named '" + coverAddText.Text + "' was successfuly added");
+                    MessageBox.Show("The playlist named '" + coverAddText.Text + "' was successfuly added");
                     coverAddText.Text = "";
                     coverAddWindow.Visibility = Visibility.Hidden;
                 }
@@ -662,7 +662,7 @@ namespace Kursach
                     cmd = new SqlCommand("INSERT INTO Plate(IDCover,N_In_Stock,Release_Time, Wholesale_price, IDCompany_Seller, IDCompany_Creator) VALUES(" + ((DataRowView)coverList.SelectedItem).Row[1] + "," + NInStockAddText.Text + ",'" + ((DateTime)releaseDate.SelectedDate).ToString("yyyy-MM-dd") + "'," + WholesalePriceAddText.Text +","+ ((DataRowView)companySellerList.SelectedItem).Row[1] + "," + ((DataRowView)companyCreatorList.SelectedItem).Row[1] + ")", conn); ;
                     cmd.ExecuteNonQuery();
                     musicChanged();
-                    MessageBox.Show("The disk as successfuly added");
+                    MessageBox.Show("The disk was successfuly added");
                     selectedDiskList.SelectedIndex = 0;
                     diskAddWindow.Visibility = Visibility.Hidden;
                 }
@@ -1148,7 +1148,7 @@ namespace Kursach
         {
             if (musicShow.Visibility == Visibility.Visible)
             {
-                MessageBox.Show("Music named '" + dt.Rows[index][0] + "' was succsessfuly deleted");
+                MessageBox.Show("Track named '" + dt.Rows[index][0] + "' was succsessfuly deleted");
                 SqlCommand cmd = new SqlCommand("Delete from Music where IDMusic = " + dt.Rows[index][2], conn);
                 cmd.ExecuteNonQuery();
                 dt = new DataTable();
@@ -1159,7 +1159,7 @@ namespace Kursach
             }
             else if (coverShow.Visibility == Visibility.Visible)
             {
-                MessageBox.Show("Cover named '" + dt.Rows[index][0] + "' was succsessfuly deleted");
+                MessageBox.Show("Playlist named '" + dt.Rows[index][0] + "' was succsessfuly deleted");
                 SqlCommand cmd = new SqlCommand("Delete from Cover where IDCover = " + dt.Rows[index][1], conn);
                 cmd.ExecuteNonQuery();
                 dt = new DataTable();
@@ -1252,6 +1252,7 @@ namespace Kursach
                     }
                 }
             }
+            showWindow.Visibility = Visibility.Hidden;
         }
         //Відкриваємо вікно з музикою
         private void musicShowing(object sender, MouseButtonEventArgs e)
@@ -1306,12 +1307,67 @@ namespace Kursach
         #endregion
 
 
+        #region TableShow
+        private void backShowWindow(object sender, MouseButtonEventArgs e)
+        {
+            showWindow.Visibility = Visibility.Hidden;
+        }
+
+        private void disksShowing(object sender, MouseButtonEventArgs e)
+        {
+            showWindow.Visibility = Visibility.Visible;
+            cmd = new SqlCommand("SELECT dbo.Cover.Name AS Playlist, dbo.Plate.N_In_Stock AS [In Stock], dbo.Plate.Release_Time AS [Released in], dbo.Plate.Wholesale_price AS Price " +
+                                 "FROM dbo.[Group] INNER JOIN " +
+                                 "dbo.MusicGroup ON dbo.[Group].IDGroup = dbo.MusicGroup.IDGroup INNER JOIN " +
+                                 "dbo.Music ON dbo.MusicGroup.IDMusic = dbo.Music.IDMusic INNER JOIN " +
+                                 "dbo.Music_Cover ON dbo.Music.IDMusic = dbo.Music_Cover.IDMusic INNER JOIN " +
+                                 "dbo.Cover ON dbo.Music_Cover.IDCover = dbo.Cover.IDCover INNER JOIN " +
+                                 "dbo.Plate ON dbo.Cover.IDCover = dbo.Plate.IDCover " +
+                                 $"WHERE(dbo.[Group].IDGroup = {dt.Rows[index][1]})" +
+                                 "GROUP BY dbo.Cover.Name, dbo.Plate.N_In_Stock, dbo.Plate.Release_Time, dbo.Plate.Wholesale_price", conn);
+            adapter = new SqlDataAdapter(cmd);
+            DataTable dataTable = new DataTable();
+            adapter.Fill(dataTable);
+            showTable.ItemsSource = dataTable.DefaultView;
+            showLabel.Content = $"The disks where {dt.Rows[index][0]}'s tracks are";
+        }
+
+        private void tracksShowing(object sender, MouseButtonEventArgs e)
+        {
+            showWindow.Visibility = Visibility.Visible;
+            cmd = new SqlCommand("SELECT dbo.Music.Name, dbo.Music.RecCondition AS Recorded " +
+                                 "FROM dbo.[Group] INNER JOIN " +
+                                 "dbo.MusicGroup ON dbo.[Group].IDGroup = dbo.MusicGroup.IDGroup INNER JOIN " +
+                                 "dbo.Music ON dbo.MusicGroup.IDMusic = dbo.Music.IDMusic " +
+                                 $"WHERE(dbo.[Group].IDGroup = {dt.Rows[index][1]}) " +
+                                 "GROUP BY dbo.Music.Name, dbo.Music.RecCondition ", conn);
+            adapter = new SqlDataAdapter(cmd);
+            DataTable dataTable = new DataTable();
+            adapter.Fill(dataTable);
+            showTable.ItemsSource = dataTable.DefaultView;
+            showLabel.Content = $"The tracks produced by {dt.Rows[index][0]}";
+        }
+
+        private void leadersShowing(object sender, MouseButtonEventArgs e)
+        {
+            showWindow.Visibility = Visibility.Visible;
+            cmd = new SqlCommand("SELECT Name, N_This_Year AS [This Year], N_Last_Year AS [Last Year], N_All_Time AS [All Time] " +
+                                 "FROM dbo.Cover " +
+                                 "GROUP BY Name, N_This_Year, N_Last_Year, N_All_Time ORDER BY [This Year] DESC", conn);
+            adapter = new SqlDataAdapter(cmd);
+            DataTable dataTable = new DataTable();
+            adapter.Fill(dataTable);
+            showTable.ItemsSource = dataTable.DefaultView;
+            showLabel.Content = $"This year leaders:";
+        }
+        #endregion
+
+
         //Виходимо з застосунку
         private void exit(object sender, MouseButtonEventArgs e)
         {
             this.Close();
         }
-
         
     }
 }
