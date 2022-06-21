@@ -354,8 +354,9 @@
                     <Border Width="300" Height="300" Background="#FF66FF96" CornerRadius="10,10,10,10">
                         <Grid>
                             <Label HorizontalAlignment="Center" VerticalAlignment="Top" Content="New group" FontSize="36" Margin="0,10,0,0" />
+                            <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Name" FontSize="16" Margin="50,60,0,0"/>
                             <TextBox x:Name="groupAddText" Width="200" Height="40" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,90"/>
-                            <ComboBox x:Name="groupAddList" Width="200" Height="40" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,20,0,0" SelectedIndex="0">
+                            <ComboBox x:Name="groupAddList" Width="200" Height="40" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,30,0,0" SelectedIndex="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Left">
                                 <System:String>Solo</System:String>
                                 <System:String>Duo</System:String>
                                 <System:String>Trio</System:String>
@@ -369,6 +370,7 @@
                             <Border x:Name="groupAddBackBtn" Width="200" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,225,0,0" Style="{StaticResource buttonBase}" MouseLeftButtonDown="addWindowClose">
                                 <Label FontSize="24" Content="Back" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
+                            <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Type" FontSize="16" Margin="50,120,0,0"/>
                         </Grid>
                     </Border>
                 </Grid>
@@ -435,11 +437,13 @@
                     </Border>
                 </Grid>
                 <Grid x:Name="musicianAddWindow" Background="#4CAFFF92" Visibility="Hidden">
-                    <Border Width="300" Height="299" Background="#FF66FF96" CornerRadius="10,10,10,10">
+                    <Border Width="300" Height="300" Background="#FF66FF96" CornerRadius="10,10,10,10">
                         <Grid>
+                            <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Name" FontSize="16" Margin="50,60,0,0"/>
+                            <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Group" FontSize="16" Margin="50,122,0,0"/>
                             <Label HorizontalAlignment="Center" VerticalAlignment="Top" Content="New musician" FontSize="36" Margin="0,10,0,0" />
                             <TextBox x:Name="musicianAddText" Width="200" Height="40" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,90"/>
-                            <ComboBox x:Name="groupList" Width="200" Height="40" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,20,0,0" DisplayMemberPath="Name"/>
+                            <ComboBox x:Name="groupList" Width="200" Height="40" FontSize="18" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,146,0,0" DisplayMemberPath="Name" VerticalContentAlignment="Center"/>
                             <Border x:Name="musicianAddAddBtn" Width="200" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,125,0,0" Style="{StaticResource buttonBase}" MouseLeftButtonDown="newMusicAdded">
                                 <Label FontSize="24" Content="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
